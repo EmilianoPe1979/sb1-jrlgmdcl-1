@@ -22,8 +22,8 @@ const Login = () => {
 
       toast.success("Inicio de sesión exitoso");
 
-      // Redirigir al usuario a la página de inventario después del inicio de sesión exitoso
-      navigate("/inventory");
+      // Redirigir al usuario al dashboard después del inicio de sesión exitoso
+      navigate("/dashboard");
     } catch (err: any) {
       console.error("Error de inicio de sesión:", err);
       setError(

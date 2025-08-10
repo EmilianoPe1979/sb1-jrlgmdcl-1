@@ -1,14 +1,26 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Outlet, Link, useLocation } from "react-router-dom";
-import { Lock, Cloud, Package, Calendar, Moon, Sun } from "lucide-react";
-import { useTranslation } from "react-i18next";
+import { Lock, Cloud, Package, Calendar, Moon, Sun, BarChart3, UserCheck, Settings, Users } from "lucide-react";
+import { useLanguage } from "../contexts/LanguageContext";
 import clsx from "clsx";
 import LanguageSelector from "./LanguageSelector";
+import { getCurrentUser } from "../services/auth";
+
+interface User {
+  id: number;
+  username: string;
+  email: string;
+  full_name: string;
+  is_admin: boolean;
+  preferred_language: string;
+}
 
 const Layout = () => {
   const location = useLocation();
-  const { t } = useTranslation();
+  const { t } = useLanguage();
   const [darkMode, setDarkMode] = useState(false);
+  const [currentUser, setCurrentUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
 
   const toggleDarkMode = () => {
     const newDarkMode = !darkMode;
@@ -23,10 +35,54 @@ const Layout = () => {
     document.documentElement.classList.toggle("dark", savedDarkMode);
   }, []);
 
-  const navigation = [
-    { name: t("inventory"), href: "/inventory", icon: Package },
-    { name: t("loans"), href: "/loans", icon: Calendar },
-  ];
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const userResponse = await getCurrentUser();
+        setCurrentUser(userResponse);
+      } catch (error: any) {
+        console.error("Error fetching user data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchUserData();
+  }, []);
+
+  // Navegación diferenciada por tipo de usuario
+  const getNavigation = () => {
+    if (!currentUser) return [];
+    
+    const baseNavigation = [
+      { name: "Ambientes", href: "/dashboard/inventory", icon: Package },
+      { name: "Programaciones", href: "/dashboard/loans", icon: Calendar },
+      { name: "Reportes", href: "/dashboard/reports", icon: BarChart3 },
+    ];
+    
+    // Si es administrador, agregar opciones adicionales
+    if (currentUser.is_admin) {
+      return [
+        ...baseNavigation,
+        { name: "Asignaciones", href: "/dashboard/assignments", icon: UserCheck },
+        { name: "Equipos", href: "/dashboard/equipment", icon: Settings },
+        { name: "Usuarios", href: "/dashboard/users", icon: Users },
+      ];
+    }
+    
+    return baseNavigation;
+  };
+  
+  const navigation = getNavigation();
+
+  // Mostrar loading mientras se obtiene la información del usuario
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-200">
@@ -65,6 +121,21 @@ const Layout = () => {
               </div>
             </div>
             <div className="flex items-center space-x-4">
+              {/* Mostrar información del usuario */}
+              {currentUser && (
+                <div className="flex items-center space-x-2">
+                  <span className="text-sm text-gray-600 dark:text-gray-300">
+                    {currentUser.full_name}
+                  </span>
+                  <span className={`px-2 py-1 text-xs rounded-full ${
+                    currentUser.is_admin 
+                      ? 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200' 
+                      : 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200'
+                  }`}>
+                    {currentUser.is_admin ? 'ADMIN' : 'USUARIO'}
+                  </span>
+                </div>
+              )}
               <LanguageSelector />
               <button
                 onClick={toggleDarkMode}
@@ -75,6 +146,16 @@ const Layout = () => {
                 ) : (
                   <Moon className="h-5 w-5" />
                 )}
+              </button>
+              {/* Botón de logout */}
+              <button
+                onClick={() => {
+                  localStorage.removeItem('token');
+                  window.location.href = '/login';
+                }}
+                className="px-3 py-2 text-sm font-medium text-red-600 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-900 rounded-md"
+              >
+                Cerrar Sesión
               </button>
             </div>
           </div>

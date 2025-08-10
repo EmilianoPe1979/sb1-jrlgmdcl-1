@@ -1,23 +1,25 @@
 import React from "react";
+import SupportForm from "./SupportForm";
+// import nijudemLogo from "../assets/Nijudem.png"; // Temporalmente comentado
 import { Link } from "react-router-dom";
 import {
   Shield,
   Home as HomeIcon,
   Lock,
   Cloud,
-  Key,
   Bell,
+  Mail,
+  Key,
   Cpu,
   Wifi,
-  ChevronRight,
+  ChevronRight
 } from "lucide-react";
-import { useTranslation } from "react-i18next";
-import Login from "./Login";
+import { useLanguage } from "../contexts/LanguageContext";
 import LanguageSelector from "../components/LanguageSelector";
 import ThemeToggle from "../components/ThemeToggle";
 
 const Home = () => {
-  const { t } = useTranslation();
+  const { t } = useLanguage();
 
   const features = [
     {
@@ -45,60 +47,17 @@ const Home = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white dark:from-gray-900 dark:to-gray-800">
       {/* Hero Section */}
-      <header className="bg-white dark:bg-gray-800 shadow-sm">
-        <div className="container mx-auto px-4 py-6 flex justify-between items-center">
+      <nav className="sticky top-0 z-50 bg-white dark:bg-gray-900 shadow transition-all duration-300">
+        <div className="container mx-auto px-4 py-4 flex justify-between items-center">
           <div className="flex items-center">
-            <div className="flex items-center text-blue-600 dark:text-blue-400">
-              <Lock className="h-8 w-8" />
-              <Cloud className="h-8 w-8 -ml-3" />
-            </div>
+            <Lock className="h-8 w-8 text-blue-600 dark:text-blue-400" />
             <span className="ml-2 text-2xl font-bold text-gray-900 dark:text-white">
               SENASEC
             </span>
           </div>
-
-          {/* Navegación para escritorio */}
-          <nav className="hidden md:flex space-x-10">
-            <a
-              href="#features"
-              className="text-base font-medium text-gray-500 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white"
-            >
-              {t("features")}
-            </a>
-            <a
-              href="#testimonials"
-              className="text-base font-medium text-gray-500 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white"
-            >
-              {t("testimonials")}
-            </a>
-            <a
-              href="#contact"
-              className="text-base font-medium text-gray-500 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white"
-            >
-              {t("contact")}
-            </a>
-          </nav>
-
-          {/* Opciones para escritorio */}
-          <div className="hidden md:flex items-center justify-end md:flex-1 lg:w-0 space-x-4">
-            {/* Selector de idioma */}
+          <div className="flex space-x-4 items-center">
             <LanguageSelector />
-
-            {/* Selector de tema */}
             <ThemeToggle />
-
-            <Link
-              to="/login"
-              className="ml-4 whitespace-nowrap inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-blue-600 hover:bg-blue-700"
-            >
-              {t("signIn")}
-            </Link>
-            <Link
-              to="/register"
-              className="ml-4 whitespace-nowrap inline-flex items-center justify-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-base font-medium text-gray-700 bg-white hover:bg-gray-50 dark:bg-gray-700 dark:text-white dark:border-gray-600 dark:hover:bg-gray-600"
-            >
-              {t("register")}
-            </Link>
           </div>
 
           {/* Opciones para móvil */}
@@ -110,24 +69,23 @@ const Home = () => {
             </Link>
           </div>
         </div>
-      </header>
+      </nav>
 
       <div className="container mx-auto px-4">
         <div className="flex flex-col md:flex-row items-center py-12 md:py-24">
-          <div className="md:w-1/2 md:pr-8">
+          <div className="md:w-1/2 md:pr-8 text-center md:text-left">
             <h1 className="text-4xl md:text-5xl font-extrabold text-gray-900 dark:text-white leading-tight">
               {t("smartSecurityForClassrooms")}
             </h1>
             <p className="mt-4 text-xl text-gray-600 dark:text-gray-300">
               {t("landingDescription")}
             </p>
-            <div className="mt-8 flex flex-col sm:flex-row">
+            <div className="mt-8 flex flex-col sm:flex-row justify-center md:justify-start">
               <Link
-                to="/register"
-                className="inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 md:py-4 md:text-lg md:px-8"
+                to="/login"
+                className="inline-flex items-center justify-center px-8 py-4 border border-transparent text-lg font-bold rounded-md text-white bg-blue-600 hover:bg-blue-700 shadow-lg transition md:py-4 md:text-lg md:px-8"
               >
-                {t("getStarted")}
-                <ChevronRight className="ml-2 h-5 w-5" />
+                {t("signIn")}
               </Link>
               <a
                 href="#features"
@@ -137,17 +95,16 @@ const Home = () => {
               </a>
             </div>
           </div>
-          <div className="md:w-1/2 mt-10 md:mt-0">
-            <div className="bg-white dark:bg-gray-800 shadow-xl rounded-lg p-6 md:p-8">
-              <div className="flex items-center justify-center mb-6">
-                <div className="flex items-center text-blue-600 dark:text-blue-400">
-                  <Key className="h-6 w-6" />
-                </div>
-                <h2 className="ml-2 text-2xl font-bold text-gray-900 dark:text-white">
-                  {t("signIn")}
-                </h2>
-              </div>
-              <Login />
+          <div className="md:w-1/2 flex justify-center md:justify-end mt-10 md:mt-0">
+            {/* <img
+              src={nijudemLogo}
+              alt="Nijudem Software Logo"
+              className="max-w-xs md:max-w-md w-full h-auto object-contain drop-shadow-xl"
+              style={{ minWidth: '180px', maxWidth: '320px' }}
+            /> */}
+            <div className="bg-blue-100 p-8 rounded-lg">
+              <h3 className="text-xl font-bold text-blue-600">NIJUDEM</h3>
+              <p className="text-gray-600">Software Solutions</p>
             </div>
           </div>
         </div>
@@ -186,57 +143,80 @@ const Home = () => {
           </div>
         </section>
 
-        {/* Testimonials Section */}
+        {/* Ventajas del Sistema */}
         <section
-          id="testimonials"
+          id="advantages"
           className="py-12 md:py-20 bg-blue-50 dark:bg-gray-900 rounded-lg"
         >
           <div className="text-center mb-12">
             <h2 className="text-3xl font-extrabold text-gray-900 dark:text-white">
-              {t("testimonials")}
+              {t("systemAdvantages")}
             </h2>
             <p className="mt-4 max-w-2xl mx-auto text-xl text-gray-500 dark:text-gray-300">
-              {t("testimonialsDescription")}
+              {t("systemAdvantagesDescription")}
             </p>
           </div>
 
-          <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
-            {[1, 2, 3].map((_, index) => (
-              <div
-                key={index}
-                className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md"
-              >
-                <div className="flex items-center mb-4">
-                  <div className="h-12 w-12 rounded-full bg-blue-100 dark:bg-blue-900 flex items-center justify-center text-blue-600 dark:text-blue-300">
-                    <span className="text-lg font-bold">
-                      {String.fromCharCode(65 + index)}
-                    </span>
-                  </div>
-                  <div className="ml-4">
-                    <h4 className="text-lg font-bold text-gray-900 dark:text-white">
-                      {t(`testimonialName${index + 1}`)}
-                    </h4>
-                    <p className="text-gray-500 dark:text-gray-400">
-                      {t(`testimonialRole${index + 1}`)}
-                    </p>
-                  </div>
-                </div>
-                <p className="text-gray-600 dark:text-gray-300 italic">
-                  "{t(`testimonialText${index + 1}`)}"
-                </p>
+          <div className="grid grid-cols-1 gap-8 md:grid-cols-4">
+            {/* Ventaja 1 */}
+            <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300">
+              <div className="inline-flex items-center justify-center p-2 bg-blue-100 dark:bg-blue-900 rounded-md text-blue-600 dark:text-blue-300">
+                <Lock className="h-6 w-6" />
               </div>
-            ))}
+              <h3 className="mt-4 text-lg font-medium text-gray-900 dark:text-white">
+                {t("integralSecurity")}
+              </h3>
+              <p className="mt-2 text-base text-gray-500 dark:text-gray-400">
+                {t("integralSecurityDesc")}
+              </p>
+            </div>
+            {/* Ventaja 2 */}
+            <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300">
+              <div className="inline-flex items-center justify-center p-2 bg-blue-100 dark:bg-blue-900 rounded-md text-blue-600 dark:text-blue-300">
+                <Cloud className="h-6 w-6" />
+              </div>
+              <h3 className="mt-4 text-lg font-medium text-gray-900 dark:text-white">
+                {t("centralizedManagement")}
+              </h3>
+              <p className="mt-2 text-base text-gray-500 dark:text-gray-400">
+                {t("centralizedManagementDesc")}
+              </p>
+            </div>
+            {/* Ventaja 3 */}
+            <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300">
+              <div className="inline-flex items-center justify-center p-2 bg-blue-100 dark:bg-blue-900 rounded-md text-blue-600 dark:text-blue-300">
+                <Bell className="h-6 w-6" />
+              </div>
+              <h3 className="mt-4 text-lg font-medium text-gray-900 dark:text-white">
+                {t("realTimeAlerts")}
+              </h3>
+              <p className="mt-2 text-base text-gray-500 dark:text-gray-400">
+                {t("realTimeAlertsDesc")}
+              </p>
+            </div>
+            {/* Ventaja 4 */}
+            <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300">
+              <div className="inline-flex items-center justify-center p-2 bg-blue-100 dark:bg-blue-900 rounded-md text-blue-600 dark:text-blue-300">
+                <Mail className="h-6 w-6" />
+              </div>
+              <h3 className="mt-4 text-lg font-medium text-gray-900 dark:text-white">
+                {t("supportAndReports")}
+              </h3>
+              <p className="mt-2 text-base text-gray-500 dark:text-gray-400">
+                {t("supportAndReportsDesc")}
+              </p>
+            </div>
           </div>
         </section>
 
         {/* Contact Section */}
-        <section id="contact" className="py-12 md:py-20">
+        <section id="support" className="py-12 md:py-20">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-extrabold text-gray-900 dark:text-white">
-              {t("contactUs")}
+              {t("supportAndIssueRegister")}
             </h2>
             <p className="mt-4 max-w-2xl mx-auto text-xl text-gray-500 dark:text-gray-300">
-              {t("contactDescription")}
+              {t("supportAndIssueRegisterDesc")}
             </p>
           </div>
 
@@ -245,53 +225,7 @@ const Home = () => {
               <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-4">
                 {t("sendMessage")}
               </h3>
-              <form className="space-y-4">
-                <div>
-                  <label
-                    htmlFor="name"
-                    className="block text-sm font-medium text-gray-700 dark:text-gray-300"
-                  >
-                    {t("name")}
-                  </label>
-                  <input
-                    type="text"
-                    id="name"
-                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-                  />
-                </div>
-                <div>
-                  <label
-                    htmlFor="email"
-                    className="block text-sm font-medium text-gray-700 dark:text-gray-300"
-                  >
-                    {t("email")}
-                  </label>
-                  <input
-                    type="email"
-                    id="email"
-                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-                  />
-                </div>
-                <div>
-                  <label
-                    htmlFor="message"
-                    className="block text-sm font-medium text-gray-700 dark:text-gray-300"
-                  >
-                    {t("message")}
-                  </label>
-                  <textarea
-                    id="message"
-                    rows={4}
-                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-                  ></textarea>
-                </div>
-                <button
-                  type="submit"
-                  className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-                >
-                  {t("send")}
-                </button>
-              </form>
+              <SupportForm />
             </div>
             <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
               <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-4">
@@ -301,8 +235,8 @@ const Home = () => {
                 <div className="flex items-start">
                   <HomeIcon className="h-5 w-5 text-blue-500 mt-1" />
                   <div className="ml-3 text-gray-600 dark:text-gray-300">
-                    <p>123 Security Street</p>
-                    <p>Tech City, TC 12345</p>
+                    <p>CBA Mosquera</p>
+                    <p>Mosquera Cundinamarca | 250040</p>
                   </div>
                 </div>
                 <div className="flex items-center">
@@ -315,7 +249,7 @@ const Home = () => {
                     <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z" />
                   </svg>
                   <span className="ml-3 text-gray-600 dark:text-gray-300">
-                    (123) 456-7890
+                    (+57) 3202020844
                   </span>
                 </div>
                 <div className="flex items-center">
@@ -329,7 +263,7 @@ const Home = () => {
                     <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
                   </svg>
                   <span className="ml-3 text-gray-600 dark:text-gray-300">
-                    info@senasec.com
+                    soporte@senasec.com
                   </span>
                 </div>
               </div>
@@ -361,25 +295,11 @@ const Home = () => {
         </section>
       </div>
 
-      {/* Footer */}
-      <footer className="bg-white dark:bg-gray-800 mt-12">
-        <div className="container mx-auto px-4 py-8">
-          <div className="flex flex-col md:flex-row justify-between items-center">
-            <div className="flex items-center">
-              <div className="flex items-center text-blue-600 dark:text-blue-400">
-                <Lock className="h-6 w-6" />
-                <Cloud className="h-6 w-6 -ml-2" />
-              </div>
-              <span className="ml-2 text-xl font-bold text-gray-900 dark:text-white">
-                SENASEC
-              </span>
-            </div>
-            <div className="mt-4 md:mt-0">
-              <p className="text-center text-gray-500 dark:text-gray-400">
-                &copy; {new Date().getFullYear()} SENASEC.{" "}
-                {t("allRightsReserved")}
-              </p>
-            </div>
+      {/* Footer Mejorado */}
+      <footer className="bg-gradient-to-r from-blue-700 to-blue-900 text-white py-6 mt-16">
+        <div className="container mx-auto px-4">
+          <div className="text-center text-sm font-medium">
+            &copy; 2025 SENASEC, todos los derechos reservados. Contacto: <a href="mailto:soporte@senasec.com" className="underline hover:text-blue-200">soporte@senasec.com</a> | Tel: (57+)3202020844
           </div>
         </div>
       </footer>
