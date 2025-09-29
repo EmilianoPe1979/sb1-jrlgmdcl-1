@@ -1,33 +1,45 @@
-import React from "react";
-import { useTranslation } from "react-i18next";
+import { useLanguage } from '../contexts/LanguageContext';
 
 const LanguageSelector = () => {
-  const { i18n } = useTranslation();
+  const { language, setLanguage } = useLanguage();
 
-  const changeLanguage = (lng: string) => {
-    i18n.changeLanguage(lng);
-    localStorage.setItem("language", lng);
+  const handleLanguageChange = (lng: 'es' | 'en') => {
+    console.log('=== LANGUAGE SELECTOR CLICK ===');
+    console.log('Cambiando de', language, 'a', lng);
+    setLanguage(lng);
   };
 
   return (
-    <div className="flex space-x-2">
+    <div className="flex space-x-1 bg-gray-100 dark:bg-gray-700 rounded-lg p-1">
       <button
-        onClick={() => changeLanguage("es")}
-        className={`px-2 py-1 text-sm rounded-md ${
-          i18n.language === "es"
-            ? "bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300"
-            : "text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700"
+        type="button"
+        onClick={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          handleLanguageChange('es');
+        }}
+        className={`px-3 py-1 text-sm font-medium rounded-md transition-all duration-200 ${
+          language === 'es'
+            ? "bg-blue-600 text-white shadow-sm"
+            : "text-gray-600 hover:bg-white hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
         }`}
+        style={{ pointerEvents: 'auto', zIndex: 1000 }}
       >
         ES
       </button>
       <button
-        onClick={() => changeLanguage("en")}
-        className={`px-2 py-1 text-sm rounded-md ${
-          i18n.language === "en"
-            ? "bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300"
-            : "text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700"
+        type="button"
+        onClick={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          handleLanguageChange('en');
+        }}
+        className={`px-3 py-1 text-sm font-medium rounded-md transition-all duration-200 ${
+          language === 'en'
+            ? "bg-blue-600 text-white shadow-sm"
+            : "text-gray-600 hover:bg-white hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
         }`}
+        style={{ pointerEvents: 'auto', zIndex: 1000 }}
       >
         EN
       </button>

@@ -1,16 +1,59 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Lock, Cloud, User, Mail, KeyRound, Phone, Camera } from 'lucide-react';
+import { Lock, Cloud, User, Mail, KeyRound, Phone} from 'lucide-react';
+// import { getCurrentUser } from '../services/auth';
 import toast from 'react-hot-toast';
+import FaceCapture from '../components/FaceCapture';
 
 const Register = () => {
+  // const [user, setUser] = useState<any>(null);
+  // const [loading, setLoading] = useState(true);
   const [formData, setFormData] = useState({
     name: '',
+    documento: '',
     email: '',
     password: '',
     role: '',
     phone: '',
   });
+
+  // useEffect(() => {
+  //   const fetchUser = async () => {
+  //     try {
+  //       const userData = await getCurrentUser();
+  //       setUser(userData);
+  //     } catch (error) {
+  //       console.error('Error fetching user:', error);
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
+
+  //   fetchUser();
+  // }, []);
+
+  // if (loading) {
+  //   return (
+  //     <div className="flex items-center justify-center min-h-screen">
+  //       <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-purple-600"></div>
+  //     </div>
+  //   );
+  // }
+
+  // if (!user || user.rol !== "admin") {
+  //   return (
+  //     <div className="flex items-center justify-center min-h-screen">
+  //       <div className="text-center">
+  //         <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
+  //           Acceso Restringido
+  //         </h2>
+  //         <p className="text-gray-600 dark:text-gray-400">
+  //           No tienes permisos para acceder a esta página.
+  //         </p>
+  //       </div>
+  //     </div>
+  //   );
+  // }
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -24,7 +67,7 @@ const Register = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <div className="flex justify-center">
           <div className="flex items-center text-blue-600">
@@ -32,13 +75,13 @@ const Register = () => {
             <Cloud className="h-12 w-12 -ml-4" />
           </div>
         </div>
-        <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
+        <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900 dark:text-white">
           Registro en SENASEC
         </h2>
       </div>
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-        <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
+        <div className="bg-white dark:bg-gray-900 py-8 px-4 shadow sm:rounded-lg sm:px-10">
           <form className="space-y-6" onSubmit={handleSubmit}>
             <div>
               <label htmlFor="name" className="block text-sm font-medium text-gray-700">
@@ -59,6 +102,27 @@ const Register = () => {
                   placeholder="Juan Pérez"
                 />
               </div>
+            </div>
+
+            <div>
+                <label htmlFor="documento" className="block text-sm font-medium text-gray-700">
+                    Documento de identidad
+                </label>
+                <div className="mt-1 relative">
+                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <User className="h-5 w-5 text-gray-400" />
+                    </div>
+                    <input
+                        id="documento"
+                        name="documento"
+                        type="text"
+                        required
+                        value={formData.documento}
+                        onChange={handleChange}
+                        className="appearance-none block w-full pl-10 px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                        placeholder="12345678"
+                    />
+                </div>
             </div>
 
             <div>
@@ -97,9 +161,11 @@ const Register = () => {
                   className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                 >
                   <option value="">Seleccione un rol</option>
+                  <option value="admin">Administrador</option>
                   <option value="instructor">Instructor</option>
-                  <option value="security">Jefe de Seguridad</option>
-                  <option value="inventory">Jefe de Inventarios</option>
+                  <option value="seguridad">Jefe de Seguridad</option>
+                  <option value="aseo">Limpieza</option>
+                  <option value="inventario">Jefe de Inventarios</option>
                 </select>
               </div>
             </div>
@@ -147,34 +213,18 @@ const Register = () => {
             </div>
 
             <div className="space-y-2">
-              <label className="block text-sm font-medium text-gray-700">
-                Captura Facial
-              </label>
-              <div className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
-                <div className="space-y-1 text-center">
-                  <Camera className="mx-auto h-12 w-12 text-gray-400" />
-                  <div className="flex text-sm text-gray-600">
-                    <button
-                      type="button"
-                      className="relative cursor-pointer bg-white rounded-md font-medium text-blue-600 hover:text-blue-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-blue-500"
-                    >
-                      Iniciar captura facial
-                    </button>
-                  </div>
-                  <p className="text-xs text-gray-500">
-                    Requerido para el registro biométrico
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <div>
-              <button
-                type="submit"
-                className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-              >
-                Registrarse
-              </button>
+                  <label className="block text-sm font-medium text-gray-700">
+                        Captura Facial
+                  </label>
+                  <FaceCapture
+                        username={formData.name}
+                        documento={formData.documento}
+                        rol={formData.role}
+                        email={formData.email}
+                        telefono={formData.phone}
+                        password={formData.password}
+                        isEditing={false}
+                      /> {/* integración del componente */}
             </div>
           </form>
 
