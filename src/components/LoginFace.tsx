@@ -42,6 +42,13 @@ const LoginFace: React.FC = () => {
         // Ajusta según lo que retorna tu FastAPI (yo sugerí message + confidence)
         if (response.status === 200 && data.message) {
             setStatus('✅ Inicio de sesión exitoso');
+            try {
+                await axios.post('http://10.215.215.201/door/success');
+                console.log('🚪 Señal enviada a la puerta correctamente');
+            } catch (doorErr) {
+                console.error('❌ Error al comunicar con la puerta:', doorErr);
+            }
+            
             localStorage.setItem('token', data.access || '');
             localStorage.setItem('currentUser', JSON.stringify(data.user || {}));
             navigate('/dashboard/inventory');
