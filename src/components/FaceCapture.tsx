@@ -35,8 +35,8 @@ const FaceCapture: React.FC<FaceCaptureProps> = ({ username, documento, rol, ema
     setStatus('Enviando al backend...');
 
     const endpoint = isEditing
-        ? 'https://senasec.onrender.com/update-face'
-        : 'https://senasec.onrender.com/register-face';
+        ? 'https://senasec.onrender.com/update-face/'
+        : 'https://senasec.onrender.com/register-face/';
 
     try {
         const formData = new FormData();
