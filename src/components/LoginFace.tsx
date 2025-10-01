@@ -32,7 +32,7 @@ const LoginFace: React.FC = () => {
         formData.append('password', password);
         formData.append('image', blob, 'login_face.jpg');
 
-        const response = await axios.post('https://senasec.onrender.com/login-face', formData, {
+        const response = await axios.post('https://senasec.onrender.com/login-face/', formData, {
             headers: { 'Content-Type': 'multipart/form-data' }
         });
 
