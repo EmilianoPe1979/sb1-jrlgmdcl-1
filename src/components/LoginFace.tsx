@@ -39,25 +39,28 @@ const LoginFace: React.FC = () => {
         const data = response.data;
         console.log('Respuesta backend:', data);
 
-        // Ajusta según lo que retorna tu FastAPI (yo sugerí message + confidence)
+        // ✅ EL SISTEMA AUTOMÁTICAMENTE ACTIVARÁ EL ESP8266
+        // No necesitas enviar señal manualmente
         if (response.status === 200 && data.message) {
-            setStatus('✅ Inicio de sesión exitoso');
-            try {
-                await axios.post('http://10.215.215.201/door/success');
-                console.log('🚪 Señal enviada a la puerta correctamente');
-            } catch (doorErr) {
-                console.error('❌ Error al comunicar con la puerta:', doorErr);
-            }
+            setStatus('✅ Inicio de sesión exitoso - Puerta activada');
+            
+            // ✅ EL ESP8266 SE ACTIVARÁ AUTOMÁTICAMENTE en los próximos 3 segundos
+            // gracias al sistema de comandos pendientes
             
             localStorage.setItem('token', data.access || '');
             localStorage.setItem('currentUser', JSON.stringify(data.user || {}));
-            navigate('/dashboard/inventory');
+            
+            // Redirigir después de un breve delay para que el usuario vea el mensaje
+            setTimeout(() => {
+                navigate('/dashboard/inventory');
+            }, 2000);
+            
         } else {
-            setStatus('❌ Rostro no coincide o no se entregó token');
+            setStatus('❌ Rostro no coincide');
         }
     } catch (err: any) {
-        console.error(err);
-        // Axios error handling
+        console.error('❌ Error en login:', err);
+        
         if (axios.isAxiosError(err)) {
             const st = err.response?.status;
             if (st === 401) {
@@ -68,7 +71,7 @@ const LoginFace: React.FC = () => {
                 setStatus('⚠️ Error en el servidor');
             }
         } else {
-            setStatus('⚠️ Error en el servidor');
+            setStatus('⚠️ Error de conexión');
         }
     } finally {
         setLoading(false);
